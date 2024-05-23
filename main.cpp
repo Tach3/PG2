@@ -163,6 +163,7 @@ int main() {
 	shinyMaterial = Material(4.0f, 32);
 	dullMaterial = Material(0.3f, 4);
 
+	//loadmodel
 	xwing = Model();
 	xwing.LoadModel("Models/teapot_tri_vnt.obj");
 
@@ -276,6 +277,7 @@ int main() {
 		dullMaterial.UseMaterial(uniformSpecularIntensity, uniformShininess);
 		xwing.RenderModel();
 		glDisable(GL_BLEND);
+
 
 		glUseProgram(0);
 
