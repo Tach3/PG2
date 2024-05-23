@@ -10,7 +10,7 @@ void Model::LoadModel(const std::string& fileName)
 	const aiScene* scene = importer.ReadFile(fileName, aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_GenSmoothNormals | aiProcess_JoinIdenticalVertices);
 
 	if (!scene) {
-		printf("model (%s) failed to load: %s",fileName,  importer.GetErrorString());
+		printf("model (%s) failed to load: %s",fileName.c_str(),  importer.GetErrorString());
 		return;
 	}
 
@@ -109,7 +109,7 @@ void Model::LoadMaterials(const aiScene* scene)
 				textureList[i] = new Texture(texPath.c_str());
 
 				if (!textureList[i]->LoadTexture()) {
-					printf("Failed to load texture at: %s\n", texPath);
+					printf("Failed to load texture at: %s\n", texPath.c_str());
 					delete textureList[i];
 					textureList[i] = nullptr;
 				}
