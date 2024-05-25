@@ -1,4 +1,5 @@
 #define STB_IMAGE_IMPLEMENTATION
+#define GLM_ENABLE_EXPERIMENTAL
 
 #include <stdio.h>
 #include <string.h>
@@ -15,6 +16,8 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
+#include <glm/ext.hpp>
+#include <glm/gtx/string_cast.hpp>
 
 #include "CommonValues.h"
 
@@ -29,6 +32,16 @@
 #include "Material.h"
 #include "Model.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+	__declspec(dllexport) DWORD NvOptimusEnablement = 1;
+	__declspec(dllexport) int AmdPowerXpressRequestHighPerformance = 1;
+
+#ifdef __cplusplus
+}
+#endif
 
 // Window dimensions
 const GLint WIDTH = 1366, HEIGHT = 768;
@@ -57,6 +70,12 @@ GLfloat deltaTime = 0.0f;
 GLfloat lastTime = 0.0f;
 
 float opacity = 0.2f;
+
+//shooting
+float ballSpeed = 0.01f;
+bool initialized_ball = false;
+glm::vec3 ballPosition;
+glm::vec3 ballDirection;
 
 // FPS counting
 double fps_counter_seconds = 0;
@@ -144,10 +163,6 @@ void CreateShaders() {
 	Shader* shader1 = new Shader();
 	shader1->CreateFromFiles(vShader, fShader);
 	shader_list.push_back(*shader1);
-}
-
-void UpdateProjectionMatrix() {
-
 }
 
 int main() {
@@ -279,8 +294,27 @@ int main() {
 		mesh_list[2]->RenderMesh();
 		//glEnable(GL_CULL_FACE);
 
+		glm::mat4 ball(1.0f);
+		ball = glm::mat4(1.0f);
+		if (mainWindow.shoot) {
+			ballPosition = camera.getCameraPosition();
+			ballDirection = glm::normalize(camera.getCameraDirection());
+			//glm::vec3 translationVector = camera.getCameraDirection() * moveSpeed;					
+			//
+			mainWindow.shoot = false;
+			initialized_ball = true;
+		}
+		if (initialized_ball) {
+			ballSpeed += 0.005f;
+			ballPosition += ballDirection * ballSpeed;
+			ball = glm::translate(ball, ballPosition);
+			ball = glm::scale(ball, glm::vec3(0.06f, 0.06f, 0.06f));
+			glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(ball));
+			dullMaterial.UseMaterial(uniformSpecularIntensity, uniformShininess);
+			sphere.RenderModel();
+		}
+
 		glEnable(GL_BLEND);
-		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		glUseProgram(shader_list[0].GetShaderID());
 		glUniform1f(uniformOpacity, opacity);
 		model = glm::mat4(1.0f);
@@ -290,16 +324,7 @@ int main() {
 		dullMaterial.UseMaterial(uniformSpecularIntensity, uniformShininess);
 		teapot.RenderModel();
 		glDisable(GL_BLEND);
-
-		model = glm::mat4(1.0f);
-		model = glm::translate(model, glm::vec3(0.0f, 0.0f, 0.0f));
-		//model = glm::scale(model, glm::vec3(0.4f, 0.4f, 1.0f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		dirtTexture.UseTexture();
-		shinyMaterial.UseMaterial(uniformSpecularIntensity, uniformShininess);
-		mesh_list[2]->RenderMesh();
-
-		
+	
 
 		glUseProgram(0);
 
@@ -313,10 +338,13 @@ int main() {
 			FPS = fps_counter_frames;
 			fps_counter_seconds = 0;
 			fps_counter_frames = 0;
-			printf("FPS: %d\n", FPS);
+			//printf("FPS: %d\n", FPS);
+			//std::cout << glm::to_string(camera.getCameraPosition()) << std::endl;
+			initialized_ball = false;
+			ballSpeed = 0.01f;
 		}
 		
-		//mainWindow.SetWindowTitle(FPS);;
+		mainWindow.SetWindowTitle(FPS);;
 	}
 
 	

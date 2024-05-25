@@ -20,25 +20,25 @@ void Camera::keyControl(bool* keys, GLfloat deltaTime)
 {
 	GLfloat velocity = moveSpeed * deltaTime;
 
+	const glm::vec3 UP{ 0.0f, 1.0f, 0.0f };
+
 	if (keys[GLFW_KEY_W])
-	{
-		position += front * velocity;
-	}
+		position += glm::normalize(front * glm::vec3(1.0f, 0.0f, 1.0f)) * velocity;
 
 	if (keys[GLFW_KEY_S])
-	{
-		position -= front * velocity;
-	}
+		position -= glm::normalize(front * glm::vec3(1.0f, 0.0f, 1.0f)) * velocity;
 
 	if (keys[GLFW_KEY_A])
-	{
-		position -= right * velocity;
-	}
+		position -= glm::normalize(right * glm::vec3(1.0f, 0.0f, 1.0f)) * velocity;
 
 	if (keys[GLFW_KEY_D])
-	{
-		position += right * velocity;
-	}
+		position += glm::normalize(right * glm::vec3(1.0f, 0.0f, 1.0f)) * velocity;
+
+	if (keys[GLFW_KEY_SPACE])
+		position += UP * velocity;
+
+	if (keys[GLFW_KEY_LEFT_SHIFT])
+		position -= UP * velocity;
 }
 
 void Camera::mouseControl(GLfloat xChange, GLfloat yChange)

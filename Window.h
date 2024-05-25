@@ -23,10 +23,13 @@ public:
 	bool getShouldClose() { return glfwWindowShouldClose(mainWindow); }
 
 	bool* getKeys() { return keys; }
+	bool shoot = false;
 	GLfloat getXchange();
 	GLfloat getYchange();
 
 	void swapBuffers() { glfwSwapBuffers(mainWindow); }
+
+	void Shoot();
 
 	void PrintGLInfo();
 
@@ -56,7 +59,7 @@ private:
 
 	void registerCallbacks();
 	
-
+	double lastShootTime = 0.0;  // Store the last time Shoot was called
 	static void error_callback(int error, const char* description);
 	static void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode);
 	static void mouse_callback(GLFWwindow* window, double xpos, double ypos);

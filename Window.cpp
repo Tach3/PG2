@@ -96,6 +96,8 @@ int Window::Initialise() {
 	glViewport(0, 0, bufferWidth, bufferHeight);
 
 	glfwSetWindowUserPointer(mainWindow, this);
+
+	return 0;
 }
 
 GLfloat Window::getXchange() {
@@ -107,6 +109,10 @@ GLfloat Window::getYchange() {
 	GLfloat theChange = yChange;
 	yChange = 0.0f;
 	return theChange;
+}
+
+void Window::Shoot() {
+	shoot = true;
 }
 
 void Window::PrintGLInfo()
