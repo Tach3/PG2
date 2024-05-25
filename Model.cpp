@@ -17,6 +17,7 @@ void Model::LoadModel(const std::string& fileName)
 	LoadNode(scene->mRootNode, scene);
 
 	LoadMaterials(scene);
+
 }
 
 void Model::RenderModel()
