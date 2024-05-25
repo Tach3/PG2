@@ -7,6 +7,8 @@
 #include <GLFW/glfw3.h>
 #include <GL/wglew.h>
 
+#include <irrKlang/irrKlang.h>
+
 #include <string> 
 
 class Window
@@ -30,6 +32,7 @@ public:
 	void swapBuffers() { glfwSwapBuffers(mainWindow); }
 
 	void Shoot();
+	void PlaySound(const char* soundFilePath);
 
 	void PrintGLInfo();
 
@@ -45,6 +48,8 @@ private:
 
 	GLfloat lastX, lastY, xChange, yChange;
 	bool mouseFirstMoved;
+
+	irrklang::ISoundEngine* soundEngine;
 
 	static bool is_vsync_on;
 	

@@ -97,6 +97,12 @@ int Window::Initialise() {
 
 	glfwSetWindowUserPointer(mainWindow, this);
 
+	soundEngine = irrklang::createIrrKlangDevice();
+	if (!soundEngine) {
+		std::cerr << "error initializating IrrKlang\n";
+		return -1;
+	}
+
 	return 0;
 }
 
@@ -113,6 +119,23 @@ GLfloat Window::getYchange() {
 
 void Window::Shoot() {
 	shoot = true;
+}
+void Window::PlaySound(const char* soundFilePath)
+{
+	if (soundEngine) {
+		irrklang::ISound* sound = soundEngine->play2D(soundFilePath, false, false);
+		if (sound) {
+			while (!sound->isFinished()) {
+				// do sth 
+			}
+
+			sound->drop();
+		}
+
+	}
+	else {
+		std::cerr << "IrrKlang není inicializovaný\n";
+	}
 }
 
 void Window::PrintGLInfo()

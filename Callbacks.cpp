@@ -84,6 +84,7 @@ void Window::mouse_button_callback(GLFWwindow* window, int button, int action, i
         double currentTime = glfwGetTime();
         if (currentTime - theWindow->lastShootTime >= 1.0) {  // Check if 1 second has passed
             theWindow->Shoot();
+            theWindow->PlaySound("Sound/8BitShoot.wav");
             theWindow->lastShootTime = currentTime;  // Update the last shoot time
         }
     }
