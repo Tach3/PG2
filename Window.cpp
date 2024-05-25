@@ -28,6 +28,7 @@ Window::Window(GLint windowWidth, GLint windowHeight)
 }
 
 int Window::Initialise() {
+	glfwSetErrorCallback(error_callback);
 	// init glfw
 	if (!glfwInit()) {
 		printf("glfw init failed");
@@ -43,6 +44,8 @@ int Window::Initialise() {
 	// core profile
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
+
+	glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE);
 
 	mainWindow = glfwCreateWindow(width, height, "Test Window", NULL, NULL);
 	if (!mainWindow) {
@@ -80,6 +83,17 @@ int Window::Initialise() {
 		glfwTerminate();
 		return 1;
 	}
+	if (GLEW_ARB_debug_output)
+	{
+		glDebugMessageCallback(MessageCallback, 0);
+		glEnable(GL_DEBUG_OUTPUT);
+
+		//default is asynchronous debug output, use this to simulate glGetError() functionality
+		glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
+
+		std::cout << "GL_DEBUG enabled.\n";
+	}
+	else std::cout << "GL_DEBUG NOT SUPPORTED!\n";
 
 	glEnable(GL_DEPTH_TEST);
 
@@ -102,7 +116,8 @@ int Window::Initialise() {
 		std::cerr << "error initializating IrrKlang\n";
 		return -1;
 	}
-
+	glfwShowWindow(mainWindow);
+	PlayBackgroundSound("Sound/8bitBg.wav");
 	return 0;
 }
 
@@ -132,6 +147,16 @@ void Window::PlaySound(const char* soundFilePath)
 			sound->drop();
 		}
 
+	}
+	else {
+		std::cerr << "IrrKlang není inicializovaný\n";
+	}
+}
+
+void Window::PlayBackgroundSound(const char* soundFilePath) {
+	if (soundEngine) {
+		// inf
+		soundEngine->play2D(soundFilePath, true, false);
 	}
 	else {
 		std::cerr << "IrrKlang není inicializovaný\n";

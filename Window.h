@@ -6,6 +6,7 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include <GL/wglew.h>
+#include "gl_err_callback.hpp"
 
 #include <irrKlang/irrKlang.h>
 
@@ -33,7 +34,7 @@ public:
 
 	void Shoot();
 	void PlaySound(const char* soundFilePath);
-
+	void PlayBackgroundSound(const char* soundFilePath);
 	void PrintGLInfo();
 
 	void SetWindowTitle(int FPS){ glfwSetWindowTitle(mainWindow, std::to_string(FPS).c_str()); }
