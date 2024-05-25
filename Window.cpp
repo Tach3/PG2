@@ -1,6 +1,8 @@
 #include "Window.h"
 
+
 bool Window::is_vsync_on = false;
+bool Window::is_fullscreen_on = false;
 
 Window::Window() {
 	width = 800;
@@ -32,6 +34,7 @@ int Window::Initialise() {
 		glfwTerminate();
 		return 1;
 	}
+	wglewInit();
 
 	//setup glfw window properties
 	// OpenGl version
@@ -56,6 +59,10 @@ int Window::Initialise() {
 
 	// register callbacks
 	registerCallbacks();
+
+	//fullscreen stuff
+	monitor = glfwGetPrimaryMonitor(); // Get primary monitor
+	mode = glfwGetVideoMode(monitor); // Get resolution of the monitor
 
 	//disable cursor
 	glfwSetInputMode(mainWindow, GLFW_CURSOR, GLFW_CURSOR_DISABLED);

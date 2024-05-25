@@ -10,7 +10,7 @@ void Model::LoadModel(const std::string& fileName)
 	const aiScene* scene = importer.ReadFile(fileName, aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_GenSmoothNormals | aiProcess_JoinIdenticalVertices);
 
 	if (!scene) {
-		printf("model (%s) failed to load: %s",fileName.c_str(),  importer.GetErrorString());
+		printf("model (%s) failed to load: %s",fileName.c_str(), importer.GetErrorString());
 		return;
 	}
 
@@ -116,7 +116,7 @@ void Model::LoadMaterials(const aiScene* scene)
 			}
 		}
 		if (!textureList[i]) {
-			textureList[i] = new Texture("Textures/box.png");
+			textureList[i] = new Texture("Textures/Glass.png");
 			textureList[i]->LoadTextureA();
 		}
 	}

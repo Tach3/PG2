@@ -5,6 +5,7 @@
 
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
+#include <GL/wglew.h>
 
 #include <string> 
 
@@ -43,6 +44,15 @@ private:
 	bool mouseFirstMoved;
 
 	static bool is_vsync_on;
+	
+	//screen stuff
+	GLFWmonitor* monitor{};
+	const GLFWvidmode* mode{};
+	static bool is_fullscreen_on;
+	int window_xcor{};
+	int window_ycor{};
+	int window_width_return_from_fullscreen{};
+	int window_height_return_from_fullscreen{};
 
 	void registerCallbacks();
 	
@@ -50,5 +60,6 @@ private:
 	static void error_callback(int error, const char* description);
 	static void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode);
 	static void mouse_callback(GLFWwindow* window, double xpos, double ypos);
+	static void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 };
 
