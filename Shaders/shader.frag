@@ -55,6 +55,8 @@ uniform SpotLight spotLights[MAX_SPOT_LIGHTS];
 uniform sampler2D theTexture;
 uniform Material material;
 
+uniform float opacity;
+
 uniform vec3 eyePosition;
 
 vec4 CalcLightByDirection(Light light, vec3 direction)
@@ -146,4 +148,5 @@ void main()
     finalColour += CalcSpotLights();
     
     colour = texture(theTexture, TexCoord) * finalColour;
+    colour.a *= opacity;
 }

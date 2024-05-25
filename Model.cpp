@@ -116,7 +116,7 @@ void Model::LoadMaterials(const aiScene* scene)
 			}
 		}
 		if (!textureList[i]) {
-			textureList[i] = new Texture("Textures/Glass.png");
+			textureList[i] = new Texture("Textures/plain.png");
 			textureList[i]->LoadTextureA();
 		}
 	}

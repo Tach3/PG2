@@ -47,7 +47,7 @@ Material shinyMaterial;
 Material dullMaterial;
 
 Model teapot;
-Model blackhawk;
+Model sphere;
 
 DirectionalLight mainLight;
 PointLight pointLights[MAX_POINT_LIGHTS];
@@ -55,6 +55,8 @@ SpotLight spotLights[MAX_SPOT_LIGHTS];
 
 GLfloat deltaTime = 0.0f;
 GLfloat lastTime = 0.0f;
+
+float opacity = 0.2f;
 
 // FPS counting
 double fps_counter_seconds = 0;
@@ -171,6 +173,9 @@ int main() {
 	teapot = Model();
 	teapot.LoadModel("Models/teapot_tri_vnt.obj");
 
+	sphere = Model();
+	sphere.LoadModel("Models/sphere_tri_vnt.obj");
+
 	mainLight = DirectionalLight(1.0f, 1.0f, 1.0f,
 		0.1f, 0.1f,
 		0.0f, 0.0f, -1.0f);
@@ -204,7 +209,7 @@ int main() {
 	spotLightCount++;
 
 	GLuint uniformProjection = 0, uniformModel = 0, uniformView = 0,
-		   uniformEyePosition = 0, uniformSpecularIntensity = 0, uniformShininess = 0;
+		   uniformEyePosition = 0, uniformSpecularIntensity = 0, uniformShininess = 0, uniformOpacity = 0;
 	glm::mat4 projection = glm::perspective(45.0f, (GLfloat)mainWindow.getBufferWidth()/(GLfloat)mainWindow.getBufferHeight(), 0.1f, 100.0f);
 
 	//loop until window close
@@ -233,6 +238,7 @@ int main() {
 		uniformEyePosition = shader_list[0].GetEyePositionLocation();
 		uniformSpecularIntensity = shader_list[0].GetSpecularIntensityLocation();
 		uniformShininess = shader_list[0].GetShininessLocation();
+		uniformOpacity = glGetUniformLocation(shader_list[0].GetShaderID(), "opacity");
 
 		glm::vec3 lowerLight = camera.getCameraPosition();
 		lowerLight.y -= 0.3f;
@@ -274,15 +280,26 @@ int main() {
 		//glEnable(GL_CULL_FACE);
 
 		glEnable(GL_BLEND);
-		glCullFace(GL_BACK);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		glUseProgram(shader_list[0].GetShaderID());
+		glUniform1f(uniformOpacity, opacity);
 		model = glm::mat4(1.0f);
-		model = glm::rotate(model, glm::radians(static_cast<float>(45 * glfwGetTime())), glm::vec3(0.0f, 1.0f, 0.0f));
 		model = glm::translate(model, glm::vec3(0.0f, 0.0f, 0.0f));
 		model = glm::scale(model, glm::vec3(0.06f, 0.06f, 0.06f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		dullMaterial.UseMaterial(uniformSpecularIntensity, uniformShininess);
 		teapot.RenderModel();
 		glDisable(GL_BLEND);
+
+		model = glm::mat4(1.0f);
+		model = glm::translate(model, glm::vec3(0.0f, 0.0f, 0.0f));
+		//model = glm::scale(model, glm::vec3(0.4f, 0.4f, 1.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		dirtTexture.UseTexture();
+		shinyMaterial.UseMaterial(uniformSpecularIntensity, uniformShininess);
+		mesh_list[2]->RenderMesh();
+
+		
 
 		glUseProgram(0);
 

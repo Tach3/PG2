@@ -8,6 +8,7 @@ void Window::registerCallbacks() {
     glfwSetKeyCallback(mainWindow, key_callback);
     glfwSetCursorPosCallback(mainWindow, mouse_callback);
     glfwSetFramebufferSizeCallback(mainWindow, framebuffer_size_callback);
+    glfwSetMouseButtonCallback(mainWindow, mouse_button_callback);
 }
 
 void Window::error_callback(int error, const char* description) {
@@ -72,10 +73,18 @@ void Window::framebuffer_size_callback(GLFWwindow* window, int width, int height
     auto theWindow = static_cast<Window*>(glfwGetWindowUserPointer(window));
     theWindow->width = width;
     theWindow->height = height;
-    // set viewport
     glViewport(0, 0, width, height);
-    // now your canvas has [0,0] in bottom left corner, and its size is [width x height] 
-    //theWindow->UpdateProjectionMatrix();
+}
+
+void Window::mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
+{
+    auto theWindow = static_cast<Window*>(glfwGetWindowUserPointer(window));
+    if (button == GLFW_MOUSE_BUTTON_RIGHT && action == GLFW_PRESS) {
+        //printf("RMB click\n");
+    }
+    if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS) {
+        //printf("LMB click\n");
+    }
 }
 
 
