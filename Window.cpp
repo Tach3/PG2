@@ -53,6 +53,7 @@ int Window::Initialise() {
 		glfwTerminate();
 		return 1;
 	}
+	glfwSetWindowPos(mainWindow, 100, 100);
 
 	//get buffer size info
 	glfwGetFramebufferSize(mainWindow, &bufferWidth, &bufferHeight);
@@ -85,11 +86,12 @@ int Window::Initialise() {
 	}
 	if (GLEW_ARB_debug_output)
 	{
+		// commented it in cos it kept spamming a message about models being loaded through video card
 		glDebugMessageCallback(MessageCallback, 0);
-		glEnable(GL_DEBUG_OUTPUT);
+		//glEnable(GL_DEBUG_OUTPUT);
 
 		//default is asynchronous debug output, use this to simulate glGetError() functionality
-		glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
+		//glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
 
 		std::cout << "GL_DEBUG enabled.\n";
 	}

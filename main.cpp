@@ -62,6 +62,7 @@ Material dullMaterial;
 Model teapot;
 Model sphere;
 Model bunny;
+Model cat;
 
 DirectionalLight mainLight;
 PointLight pointLights[MAX_POINT_LIGHTS];
@@ -195,6 +196,9 @@ int main() {
 	bunny = Model();
 	bunny.LoadModel("Models/bunny_tri_vnt.obj");
 
+	cat = Model();
+	cat.LoadModel("Models/12221_Cat_v1_l3.obj");
+
 
 	mainLight = DirectionalLight(1.0f, 1.0f, 1.0f,
 		0.1f, 0.1f,
@@ -322,6 +326,14 @@ int main() {
 				ballSpeed = 0.01f;
 			}
 		}
+
+		model = glm::mat4(1.0f);
+		model = glm::translate(model, glm::vec3(-5.0f, 1.0f, -5.0f));
+		model = glm::rotate(model, -45 * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(0.06f, 0.06f, 0.06f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		dullMaterial.UseMaterial(uniformSpecularIntensity, uniformShininess);
+		cat.RenderModel();
 
 		model = glm::mat4(1.0f);
 		model = glm::translate(model, glm::vec3(1.0f, 1.0f, 1.0f));
