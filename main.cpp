@@ -305,13 +305,17 @@ int main() {
 			initialized_ball = true;
 		}
 		if (initialized_ball) {
-			ballSpeed += 0.005f;
+			ballSpeed += 0.001f;
 			ballPosition += ballDirection * ballSpeed;
 			ball = glm::translate(ball, ballPosition);
 			ball = glm::scale(ball, glm::vec3(0.06f, 0.06f, 0.06f));
 			glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(ball));
 			dullMaterial.UseMaterial(uniformSpecularIntensity, uniformShininess);
 			sphere.RenderModel();
+			if (ballSpeed > 0.4f) {
+				initialized_ball = false;
+				ballSpeed = 0.01f;
+			}
 		}
 
 		glEnable(GL_BLEND);
@@ -340,8 +344,6 @@ int main() {
 			fps_counter_frames = 0;
 			//printf("FPS: %d\n", FPS);
 			//std::cout << glm::to_string(camera.getCameraPosition()) << std::endl;
-			initialized_ball = false;
-			ballSpeed = 0.01f;
 		}
 		
 		mainWindow.SetWindowTitle(FPS);;
