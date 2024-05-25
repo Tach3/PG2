@@ -4,9 +4,9 @@ spacebar - up
 shift - down  
 
 ### other keys  
-LMB - shoot 
+LMB - shoot  
 F11 - fullscreen  
-V - Vsync ON/OFF
+V - Vsync ON/OFF  
 
 ## Models
 OBJ z PG2 adresara  
